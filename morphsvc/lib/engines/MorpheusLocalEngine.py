@@ -58,7 +58,8 @@ class MorpheusLocalEngine(AlpheiosXmlEngine):
             transformed = self.transformer.transform_output(parsed)
         else:
             transformed = etree.fromstring(parsed)
-        self.add_lexical_entity_uris(transformed,language)
+        if self.lexical_entity_svc_lat is not None and self.lexical_entity_svc_grc is not None and self.lexical_entity_base_uri is not None:
+            self.add_lexical_entity_uris(transformed,language)
         return transformed
 
     def _execute_query(self,args,word):
