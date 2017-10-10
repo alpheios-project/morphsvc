@@ -20,7 +20,7 @@ class AlpheiosLegacyXmlEngine(Engine):
         return analysis
 
     def output_json(self, engine_response):
-        return dumps(legacy.data(engine_response),ensure_ascii=False)
+        return etree.tostring(engine_response, pretty_print=True, encoding='unicode')
 
     def output_xml(self, engine_response):
         return etree.tostring(engine_response, pretty_print=True, encoding='unicode')
