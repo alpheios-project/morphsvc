@@ -3,9 +3,8 @@ from subprocess import check_output
 import itertools
 from lxml import etree
 from collections import Callable
+from morphsvc.lib.transformers.AsciiGreekTransformer import AsciiGreekTransformer
 import os, requests, re
-from morphsvc.lib.transformers.BetacodeTransformer import BetacodeTransformer
-from morphsvc.lib.transformers.LatinTransformer import LatinTransformer
 
 class MorpheusLegacyLocalEngine(AlpheiosLegacyXmlEngine):
     """ Morpheus Legacy Local Engine (Morpheus is callable locally)
@@ -24,6 +23,7 @@ class MorpheusLegacyLocalEngine(AlpheiosLegacyXmlEngine):
        self.language_codes = ['grc']
        self.uri = self.config['PARSERS_MORPHEUS_URI']
        self.morpheus_path = self.config['PARSERS_MORPHEUS_PATH']
+       self.transformer = AsciiGreekTransformer(config)
 
     def lookup(self,word=None,word_uri=None,language=None,request_args=None,**kwargs):
         """ Word Lookup Function
@@ -39,6 +39,7 @@ class MorpheusLegacyLocalEngine(AlpheiosLegacyXmlEngine):
         :rtype: str
         """
         args = self.make_args(language,request_args)
+        word = self.transformer.transform_input(word)
         parsed = self._execute_query(args,word)
         # this is a ridiculous hack to preserve backwards consistency - the old
         # Alpheios mod_perl wrapper stripped the # sign off the hdwds
