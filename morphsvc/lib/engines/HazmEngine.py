@@ -29,6 +29,7 @@ class HazmEngine(AlpheiosXmlEngine):
         self.oa_transformer = OaLegacyTransformer()
         self.language_codes = ['per','fas']
         self.uri = self.config['PARSERS_HAZM_URI']
+        self.rights = self.config['PARSERS_HAZM_RIGHTS']
         self.tagger = POSTagger(model=os.path.join(os.path.dirname(__file__),'hazm',"postagger.model"))
 
     def lookup(self,word=None,word_uri=None,language=None,request_args=None,**kwargs):

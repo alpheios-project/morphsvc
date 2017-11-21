@@ -22,6 +22,7 @@ class MorpheusLegacyLocalEngine(AlpheiosLegacyXmlEngine):
        self.config = config
        self.language_codes = ['grc']
        self.uri = self.config['PARSERS_MORPHEUS_URI']
+       self.rights = self.config['PARSERS_MORPHEUS_RIGHTS']
        self.morpheus_path = self.config['PARSERS_MORPHEUS_PATH']
        self.transformer = AsciiGreekTransformer(config)
 

@@ -13,12 +13,13 @@ class AlpheiosXmlEngine(Engine):
         self.code = code
         self.oa_transformer = OaLegacyTransformer()
         self.uri = ""
+        self.rights = ""
 
     def get_uri(self):
         return self.uri
 
     def as_annotation(self, annotation_uri, word_uri,analysis):
-        return self.oa_transformer.wrap(annotation_uri, word_uri, self.get_uri(), analysis)
+        return self.oa_transformer.wrap(annotation_uri, word_uri, self.get_uri(), analysis, self.rights)
 
     def output_json(self, engine_response):
         return dumps(legacy.data(engine_response),ensure_ascii=False)
@@ -31,5 +32,3 @@ class AlpheiosXmlEngine(Engine):
 
     def from_cache(self,cached_response):
         return etree.fromstring(cached_response)
-
-

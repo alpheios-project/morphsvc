@@ -9,6 +9,5 @@ class WhitakersRemoteEngine(AlpheiosRemoteEngine):
        self.config = config
        self.uri = self.config['PARSERS_WHITAKERS_URI']
        self.remote_url = self.config['PARSERS_WHITAKERS_REMOTE_URL']
+       self.rights = self.config['PARSERS_WHITAKERS_RIGHTS']
        self.language_codes = ['lat','la']
-
-

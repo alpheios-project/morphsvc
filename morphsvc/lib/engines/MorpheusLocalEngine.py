@@ -23,6 +23,7 @@ class MorpheusLocalEngine(AlpheiosXmlEngine):
        self.config = config
        self.language_codes = ['grc', 'la', 'lat' ]
        self.uri = self.config['PARSERS_MORPHEUS_URI']
+       self.rights = self.config['PARSERS_MORPHEUS_RIGHTS']
        self.morpheus_path = self.config['PARSERS_MORPHEUS_PATH']
        self.transformer = BetacodeTransformer(config)
        self.latin_transformer = LatinTransformer(config)

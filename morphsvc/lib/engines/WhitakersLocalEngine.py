@@ -24,6 +24,7 @@ class WhitakersLocalEngine(AlpheiosXmlEngine):
        self.language_codes = ['la', 'lat' ]
        self.uri = self.config['PARSERS_WHITAKERS_URI']
        self.wordsxml_path = self.config['PARSERS_WHITAKERS_PATH']
+       self.rights = self.config['PARSERS_WHITAKERS_RIGHTS']
        self.latin_transformer = LatinTransformer(config)
 
     def lookup(self,word=None,word_uri=None,language=None,request_args=None,**kwargs):

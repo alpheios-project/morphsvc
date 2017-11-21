@@ -10,7 +10,6 @@ class AramorphRemoteEngine(AlpheiosRemoteEngine):
        self.language_codes = ['ara', 'ar']
        self.config = config
        self.uri = self.config['PARSERS_ARAMORPH_URI']
+       self.rights = self.config['PARSERS_ARAMORPH_RIGHTS']
        self.remote_url = self.config['PARSERS_ARAMORPH_REMOTE_URL']
        self.transformer = BuckwalterTransformer(config)
-
-
