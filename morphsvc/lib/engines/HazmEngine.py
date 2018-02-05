@@ -1,6 +1,5 @@
 from lxml import etree
 from json import dumps
-from hazm import POSTagger,word_tokenize, sent_tokenize
 from hazm.Stemmer import Stemmer
 from hazm.Lemmatizer import Lemmatizer
 from hazm.Normalizer import Normalizer
@@ -30,7 +29,8 @@ class HazmEngine(AlpheiosXmlEngine):
         self.language_codes = ['per','fas']
         self.uri = self.config['PARSERS_HAZM_URI']
         self.rights = self.config['PARSERS_HAZM_RIGHTS']
-        self.tagger = POSTagger(model=os.path.join(os.path.dirname(__file__),'hazm',"postagger.model"))
+        self.stemmer = Stemmer()
+        self.lemmatizer = Lemmatizer()
 
     def lookup(self,word=None,word_uri=None,language=None,request_args=None,**kwargs):
         """ Word Lookup Function
@@ -48,27 +48,27 @@ class HazmEngine(AlpheiosXmlEngine):
         normalizer = Normalizer()
         item = normalizer.normalize(word)
         analyses = []
-        stemmer = Stemmer()
-        wordstem = stemmer.stem(item)
-        wordtagged = self.tagger.tag(word_tokenize(item))
-        wordpofs = wordtagged[0][1]
-        wordpofs = self.maptohazm(wordpofs)
+        wordstem = self.stemmer.stem(item)
+        lemma = self.lemmatizer.lemmatize(item)
+        #wordtagged = self.tagger.tag(word_tokenize(item))
+        #wordpofs = wordtagged[0][1]
+        #wordpofs = self.maptohazm(wordpofs)
         analysis = {}
         analysis['entries'] = []
         entry = {}
         entry['dict'] = {}
         entry['dict']['hdwd'] = {}
         entry['dict']['hdwd']['lang'] = 'per'
-        entry['dict']['hdwd']['text'] = wordstem
+        entry['dict']['hdwd']['text'] = lemma
         entry['infls'] = []
         infl = {}
         infl['stem'] = {}
         infl['stem']['text'] = wordstem
         infl['stem']['lang'] = 'per'
         infl['pofs'] = {}
-        if wordpofs:
-            infl['pofs']['order'] = str(wordpofs[1])
-            infl['pofs']['text'] = wordpofs[0]
+        #if wordpofs:
+        #    infl['pofs']['order'] = str(wordpofs[1])
+        #    infl['pofs']['text'] = wordpofs[0]
         entry['infls'].append(infl)
         analysis['entries'].append(entry)
         analyses.append(analysis)
