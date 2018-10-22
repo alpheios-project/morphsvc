@@ -52,7 +52,7 @@ class MorpheusLocalEngine(AlpheiosXmlEngine):
         parsed = self._execute_query(args,word)
         if not isinstance(parsed,str):
             parsed = parsed.decode('utf-8')
-        if parsed.find("<unknown"):
+        if parsed.find("<unknown") >= 0:
             parsed = self._retry_word(request_args,args,parsed,word)
         # this is a ridiculous hack to preserve backwards consistency - the old
         # Alpheios mod_perl wrapper stripped the # sign off the hdwds
