@@ -50,10 +50,12 @@ class MorpheusLocalEngine(AlpheiosXmlEngine):
         else:
             word = self.latin_transformer.transform_input(word)
         parsed = self._execute_query(args,word)
-        # this is a ridiculous hack to preserve backwards consistency - the old
-        # Alpheios mod_perl wrapper stripped the # sign off the hdwds
         if not isinstance(parsed,str):
             parsed = parsed.decode('utf-8')
+        if parsed.find("<unknown"):
+            parsed = self._retry_word(request_args,args,parsed,word)
+        # this is a ridiculous hack to preserve backwards consistency - the old
+        # Alpheios mod_perl wrapper stripped the # sign off the hdwds
         parsed = re.sub(r'#(\d+)</hdwd>', '\\1</hdwd>', parsed)
         if language == 'grc':
             transformed = self.transformer.transform_output(parsed)
@@ -118,6 +120,19 @@ class MorpheusLocalEngine(AlpheiosXmlEngine):
         url = svc + lemma
         return requests.get(url).text
 
+    # sometimes greek encoded words use the apostrophe for 1fbd (greek koronis)
+    # by default the parser will allow this and convert it to 1fbd but in some situations
+    # we might get an actual apostrophe at the beginning or end of the word and so if that's the case
+    # and we don't have a good parse, we can try again without it in the event an apostrophe is what
+    # was really meant. To skip this use the noAposRetry=1 request argument
+    def _retry_word(self,request_args,args,parsed,word):
+        if (not 'noAposRetry' in request_args or request_args['noAposRetry'] is None or request_args['noAposRetry'] == '0') and (word.endswith("'") or word.startswith("'")):
+            word = word.replace("'","")
+            parsed = self._execute_query(args,word)
+            if not isinstance(parsed,str):
+                parsed = parsed.decode('utf-8')
+        return parsed
+
     def make_args(self,lang,request_args):
         args = []
         args.append("-m"+self.config['PARSERS_MORPHEUS_STEMLIBDIR'])
@@ -137,4 +152,4 @@ class MorpheusLocalEngine(AlpheiosXmlEngine):
         :return: engine specific request arguments or None if there aren't any
         :rtype: dict
         """
-        return {'strictCase': '^1$','checkPreverbs':'^1$'}
+        return {'strictCase': '^1$','checkPreverbs':'^1$', 'noAposRetry': '^0$'}
