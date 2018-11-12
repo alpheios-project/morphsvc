@@ -3,7 +3,7 @@ from subprocess import check_output
 import itertools
 from lxml import etree
 from collections import Callable
-import os, requests
+import os, requests, sys
 
 class AlpheiosRemoteEngine(AlpheiosXmlEngine):
 
@@ -30,7 +30,14 @@ class AlpheiosRemoteEngine(AlpheiosXmlEngine):
 
     def _execute_query(self,word,language):
         url = self.remote_url + word
-        return requests.get(url).text
+        # TODO this should come from config
+        headers = {
+          'User-Agent': 'AlpheiosMorphService-1.0',
+        }
+        response = requests.get(url,headers)
+        # TODO should really raise error
+        #response.raise_for_status()
+        return response.text
 
 
 
