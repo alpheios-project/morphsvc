@@ -34,7 +34,7 @@ class AlpheiosRemoteEngine(AlpheiosXmlEngine):
         headers = {
           'User-Agent': 'AlpheiosMorphService-1.0',
         }
-        response = requests.get(url,headers)
+        response = requests.get(url,headers=headers)
         # TODO should really raise error
         #response.raise_for_status()
         return response.text
