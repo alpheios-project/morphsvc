@@ -8,7 +8,7 @@ class LatinTransformer:
       pass
 
    def transform_input(self,input):
-      input = re.sub(r'[^\w|\d|\s]', '', input)
+      input = re.sub(r'[^\w\d\s]', '', input)
       input = re.sub(r'[\u00c0\u00c1\u00c2\u00c3\u00c4\u0100\u0102]','A', input)
       input = re.sub(r'[\u00c8\u00c9\u00ca\u00cb\u0112\u0114]','E', input)
       input = re.sub(r'[\u00cc\u00cd\u00ce\u00cf\u012a\u012c]', 'I', input)
